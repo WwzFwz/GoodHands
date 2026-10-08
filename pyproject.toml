@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "goodhands-harness"
+version = "0.1.0"
+description = "A local, evidence-driven software engineering agent harness"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.10,<3", "httpx>=0.28,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.9"]
+
+[project.scripts]
+goodhands = "goodhands.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["goodhands*"]
+
+[tool.setuptools.package-data]
+goodhands = ["defaults/*.json", "defaults/skills/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
