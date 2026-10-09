@@ -10,6 +10,7 @@ import uuid
 from pathlib import Path
 
 from . import __version__
+from .agents_cli import add_agents_parser, agents_main
 from .config import load_settings, load_task
 from .demo import DemoProvider, create_demo
 from .engine import Engine
@@ -116,6 +117,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
+    add_agents_parser(commands)
     init = commands.add_parser(
         "init", help="Create config and sample task without overwriting files"
     )
@@ -216,6 +218,8 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     store = None
     try:
+        if args.command == "agents":
+            return agents_main(args)
         if args.command == "init":
             project = Path(args.project).resolve()
             project.mkdir(parents=True, exist_ok=True)
@@ -312,6 +316,10 @@ def main(argv: list[str] | None = None) -> int:
                 state = engine.execute(state["id"])
             else:
                 state = store.get(args.run_id)
+                if state.get("kind") == "configuration":
+                    raise ValueError(
+                        "Use agents diff/apply for drafts; rerun agents configure with clarification for a new draft"
+                    )
                 if state["simulated"]:
                     raise ValueError(
                         "Demo runs are deterministic fixtures; start a new demo instead of resuming with a live provider"

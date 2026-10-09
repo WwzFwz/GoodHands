@@ -103,7 +103,7 @@ class Settings(Contract):
         if "default" not in self.profiles:
             raise ValueError("profiles.default is required")
         for role, profile in self.role_profiles.items():
-            if role not in ROLES or profile not in self.profiles:
+            if role not in (*ROLES, "configurator") or profile not in self.profiles:
                 raise ValueError(f"Invalid role/profile mapping: {role} -> {profile}")
         if self.policy.escalation_profile and self.policy.escalation_profile not in self.profiles:
             raise ValueError("Escalation profile does not exist")

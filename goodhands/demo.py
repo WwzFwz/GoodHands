@@ -139,3 +139,50 @@ def create_demo(directory: Path):
     (directory / "calculator.py").write_text(CALCULATOR, encoding="utf-8")
     (directory / "tests").mkdir()
     (directory / "tests" / "test_calculator.py").write_text(TESTS, encoding="utf-8")
+
+
+class ConfigurationDemoProvider:
+    """Offline fixture exercises real compilation and application, not live model quality."""
+
+    simulated = True
+
+    def complete(self, *, profile, messages, tools, stage):
+        import json
+
+        from .config import Role
+        from .registry import render_role
+
+        context = json.loads(messages[1]["content"])
+        role = Role.model_validate(context["role"])
+        role.skills = ["skills/implementation.md"]
+        role.instructions += "\nIkuti kontrak Code Architect; hindari abstraksi berlebihan.\n"
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "role": "assistant",
+                        "tool_calls": [
+                            {
+                                "id": "configuration-demo",
+                                "type": "function",
+                                "function": {
+                                    "name": "submit_configuration",
+                                    "arguments": json.dumps(
+                                        {
+                                            "summary": "Simulasi: skill implementasi untuk Coder.",
+                                            "readme": render_role(role),
+                                            "skills": [
+                                                {
+                                                    "path": "skills/implementation.md",
+                                                    "content": "# Implementasi\n\nIkuti kontrak. Jaga acceptance criteria dan tes tepercaya.\n",
+                                                }
+                                            ],
+                                        }
+                                    ),
+                                },
+                            }
+                        ],
+                    }
+                }
+            ]
+        }
