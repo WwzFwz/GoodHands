@@ -62,11 +62,30 @@ Ganti `RUN_ID` dengan ID pada output run; `--project` selalu menunjuk repository
 
 `apply` hanya menerima workflow selesai, memeriksa snapshot hasil verifikasi, menolak jika repository sumber berubah sejak run dibuat, dan menyimpan backup. GoodHands tidak melakukan commit, push, atau deployment otomatis.
 
+## Mengatur agent tanpa menghafal format
+
+Configurator adalah agent khusus untuk menulis konfigurasi, terpisah dari workflow coding.
+Setelah model dan API key diatur, berikan instruksi biasa:
+
+```powershell
+.\.venv\Scripts\goodhands.exe agents configure --project examples/calculator --role coder --request "Ikuti kontrak Code Architect, gunakan OOP bila relevan, dan hindari abstraksi berlebihan."
+```
+
+Output menampilkan draft README/skill, diff, biaya, dan perintah `agents apply` untuk
+menerapkannya. Tambahkan `--apply` jika ingin hasil valid langsung diterapkan. Jika maksud
+permintaan belum jelas, Configurator mengeluarkan pertanyaan. Compiler dan validator bekerja
+tanpa LLM; hanya penulisan draft oleh Configurator yang memakai inference.
+
+Untuk mencoba tanpa biaya: `.\.venv\Scripts\goodhands.exe agents demo`. Untuk mengedit sendiri:
+jalankan `agents init`, lalu edit `agents/NAMA_ROLE/README.md` dan jalankan `agents validate`.
+Detail format, command, dan batas tersedia di [panduan konfigurasi agent](docs/agent-configuration.md).
+
 ## Dokumentasi
 
 - [Workflow dan pemilik keputusan](docs/agent-workflow.md)
 - [Arsitektur dan trade-off](docs/harness-architecture.md)
 - [Penggunaan, konfigurasi dan batas MVP](docs/usage.md)
+- [Configurator dan folder Markdown per agent](docs/agent-configuration.md)
 - [Menjalankan pemeriksaan pengembangan](scripts/check/README.md)
 
 ## Pemeriksaan pengembangan

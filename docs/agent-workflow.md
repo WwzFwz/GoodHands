@@ -8,6 +8,13 @@ Arsitektur dan trade-off dijelaskan di [Arsitektur harness](harness-architecture
 
 ## Prinsip alur kerja
 
+Configurator adalah agent authoring terpisah yang berjalan sebelum workflow, hanya saat
+pengguna ingin membuat atau mengedit definisi role/skill. Ia menerima bahasa biasa,
+menghasilkan draft Markdown, dan memperbaiki kesalahan dari validator deterministik.
+Draft diterapkan melalui `agents apply` atau opsi `--apply`. Configurator tidak mengambil
+alih acceptance criteria dan tidak ikut setiap run coding. Alur lengkapnya ada pada
+[panduan konfigurasi agent](agent-configuration.md).
+
 - Pengguna menentukan tujuan, batasan bisnis, dan kriteria penerimaan. Agent boleh mengidentifikasi kekurangan informasi dan mengusulkan asumsi secara eksplisit.
 - Workflow Controller mengatur urutan, status, anggaran, dan perpindahan tahap menggunakan aturan program. Controller bukan role LLM tambahan.
 - Setiap role menerima kontrak tugas dan konteks yang relevan, lalu menyerahkan artefak yang dapat diperiksa.

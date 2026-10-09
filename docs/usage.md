@@ -70,11 +70,11 @@ Runner mencatat argv, exit code, durasi, timeout, output terbatas dan snapshot. 
 
 ## Role dan skill yang bisa diganti
 
-Default role ada di `goodhands/defaults/roles.json`. Untuk kustomisasi proyek, tambahkan key top-level `roles_dir = "harness-roles"` dan `skills_dir = "harness-skills"` sebelum tabel pertama TOML. File JSON per role memakai skema `name`, `version`, `instructions`, `tools`, `enabled`, dan `skills`.
+Default role ada di `goodhands/defaults/agents/NAMA_ROLE/README.md`. Jalankan `goodhands agents init` untuk menyalin template ke `agents/`, atau gunakan `goodhands agents configure --role coder --request "instruksi biasa"` agar Configurator menuliskannya. Lihat [panduan Configurator](agent-configuration.md) untuk format, subfolder skill, validasi, kompilasi JSON, dan penerapan draft. `roles_dir` dan `skills_dir` dapat diatur sebagai key top-level TOML; JSON per role lama tetap didukung tanpa duplikasi dengan sumber Markdown.
 
 Override role dapat mempersempit tool, tetapi tidak memperluas batas izin bawaan. Reviewer tidak bisa diberi tool menulis, dan Debugger tidak dapat membuat patch produk. Menonaktifkan role yang diperlukan preset ditolak; jika Debugger dinonaktifkan, run yang membutuhkan diagnosis akan berhenti dengan kendala.
 
-Skill berupa file Markdown bernama sederhana, misalnya `python.md`, dipilih melalui `task.skills` atau `role.skills`. Isi role/skill disalin ke checkpoint ketika run dibuat agar perubahan file di tengah run tidak mengubah instruksi yang sedang dieksekusi. Plugin Python arbitrer dan penambahan jenis role/tool baru melalui konfigurasi belum didukung; antarmuka Python internal dapat diperluas melalui perubahan kode yang ditinjau.
+Skill berupa Markdown, dipilih melalui `task.skills` atau `role.skills`. Nama sederhana seperti `python` mencari skill lokal/bawaan. Referensi `.md` dalam README relatif terhadap folder role dan dapat menunjuk subfolder atau skill bersama di dalam proyek; dalam task/JSON legacy path tersebut relatif terhadap proyek. Isi role/skill disalin ke checkpoint ketika run dibuat agar perubahan file di tengah run tidak mengubah instruksi yang sedang dieksekusi. Plugin Python arbitrer dan penambahan jenis role/tool baru melalui konfigurasi belum didukung; antarmuka Python internal dapat diperluas melalui perubahan kode yang ditinjau.
 
 ## Biaya dan batas
 

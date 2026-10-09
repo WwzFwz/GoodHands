@@ -57,6 +57,14 @@ Consultant dan Debugger adalah role dalam Agent Runtime yang sama. Consultant me
 
 ## Batas tanggung jawab modul
 
+Jalur konfigurasi memiliki agent Configurator tersendiri (`configurator.py`) dengan prompt
+khusus, output terstruktur, dan maksimal tiga respons untuk menyusun/memperbaiki draft.
+Registry (`registry.py`) membaca README berfrontmatter YAML dan skill eksplisit; validator
+serta compiler JSON berjalan tanpa LLM. CLI authoring berada di `agents_cli.py`, sementara
+budget request/accounting digunakan bersama dengan runtime engineering melalui `inference.py`.
+Definisi dibekukan saat run dibuat, dan JSON kompilasi merupakan artefak turunan. Pilihan
+format, batas kemampuan, dan trade-off dijelaskan di [konfigurasi agent](agent-configuration.md).
+
 | Modul | Tanggung jawab | Batas |
 | --- | --- | --- |
 | Workflow Controller | Menjalankan state machine, satu Coder aktif, checkpoint, routing diagnosis dan eskalasi | Tidak menyerahkan keputusan selesai atau anggaran sepenuhnya kepada LLM |
